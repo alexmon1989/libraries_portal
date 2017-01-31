@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="home.librarykind" pk="1">
+        <field name="title" type="CharField">Национальные библиотеки</field>
+    </object>
+    <object model="home.librarykind" pk="2">
+        <field name="title" type="CharField">Научные библиотеки</field>
+    </object>
+    <object model="home.librarykind" pk="3">
+        <field name="title" type="CharField">Медицинские библиотеки</field>
+    </object>
+    <object model="home.librarykind" pk="4">
+        <field name="title" type="CharField">Библиотеки вузов</field>
+    </object>
+    <object model="home.librarykind" pk="5">
+        <field name="title" type="CharField">Общедоступные (публичные) библиотеки</field>
+    </object>
+    <object model="home.librarykind" pk="6">
+        <field name="title" type="CharField">Сельские библиотеки</field>
+    </object>
+    <object model="home.librarykind" pk="7">
+        <field name="title" type="CharField">Детские и школьные библиотеки</field>
+    </object>
+    <object model="home.librarykind" pk="8">
+        <field name="title" type="CharField">Личные библиотеки</field>
+    </object>
+    <object model="home.librarykind" pk="9">
+        <field name="title" type="CharField">Электронные библиотеки</field>
+    </object>
+</django-objects>

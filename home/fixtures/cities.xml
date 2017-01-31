@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="home.city" pk="1">
+        <field name="title" type="CharField">Ставрополь</field>
+        <field name="region" rel="ManyToOneRel" to="home.region">1</field>
+    </object>
+    <object model="home.city" pk="2">
+        <field name="title" type="CharField">Владикавказ</field>
+        <field name="region" rel="ManyToOneRel" to="home.region">1</field>
+    </object>
+    <object model="home.city" pk="3">
+        <field name="title" type="CharField">Москва</field>
+        <field name="region" rel="ManyToOneRel" to="home.region">2</field>
+    </object>
+    <object model="home.city" pk="4">
+        <field name="title" type="CharField">Химки</field>
+        <field name="region" rel="ManyToOneRel" to="home.region">2</field>
+    </object>
+    <object model="home.city" pk="5">
+        <field name="title" type="CharField">Симферополь</field>
+        <field name="region" rel="ManyToOneRel" to="home.region">3</field>
+    </object>
+</django-objects>

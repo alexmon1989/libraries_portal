@@ -1,0 +1,131 @@
+{% extends 'reader_cabinet/layout/master.html' %}
+{% load reader_cabinet_extras %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'reader_cabinet:home' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+        <li class="active">Документ</li>
+    </ol>
+{% endblock %}
+
+{% block content-h1 %}
+    {{ document.title }}
+{% endblock %}
+
+{% block content %}
+<!-- Default box -->
+<div class="box">
+    <div class="box-body">
+        <p><a href="{{request.META.HTTP_REFERER}}">Назад к результатам поиска</a></p>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>Описание документа</h4>
+
+                <dl>
+                    <dt>Название</dt>
+                    <dd>{{ document.title }}</dd>
+                    <dt>Тип документа</dt>
+                    <dd>{{ document.document_type }}</dd>
+                    <dt>Срок возврата</dt>
+                    <dd>2 недели</dd>
+                    <dt>Шифр хранения (№ в каталоге)</dt>
+                    <dd>{{ document.catalog_number }}</dd>
+                    <dt>Автор</dt>
+                    <dd>{{ document.author }}</dd>
+                    <dt>Другие ответственные лица</dt>
+                    <dd>
+                        {% for person in document.another_persons.all %}
+                            {{ person.title }}{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    </dd>
+                    <dt>Язык</dt>
+                    <dd>{{ document.language }}</dd>
+                    <dt>Примечания</dt>
+                    <dd>{{ document.notes }}</dd>
+                    <dt>Предметные рубрики</dt>
+                    <dd>
+                        {% for rubric in document.rubrics.all %}
+                            {{ rubric.title }}{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-sm-6">
+                <h4>Расположение документа</h4>
+
+                <dl>
+                    <dt>Название библиотеки</dt>
+                    <dd><a href="{% url 'reader_cabinet:library_show' document.library.id %}">{{ document.library.title }}</a></dd>
+                    <dt>Регион</dt>
+                    <dd>{{ document.library.city.region }}</dd>
+                    <dt>Город</dt>
+                    <dd>{{ document.library.city }}</dd>
+                    <dt>Адрес</dt>
+                    <dd>{{ document.library.address }}</dd>
+                    <dt>Статус доступности</dt>
+                    <dd class="text-green"><strong>В наличии</strong><br></dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="text-center">
+                    {% call_method request.user.profile 'has_access_to_library' document.library.id as has_access %}
+                    {% if has_access %}
+                        <a href="{% url 'reader_cabinet:create_order' document.id %}" class="btn btn-primary btn-lg"><i class="fa fa-book" aria-hidden="true"></i> Забронировать</a>
+                    {% else %}
+                        <a href="{% url 'reader_cabinet:access_request' document.library_id %}" class="btn btn-warning btn-lg"><i class="fa fa-book" aria-hidden="true"></i> Запросить доступ к библиотеке</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>Отзывы</h4>
+
+                {% if document.get_moderated_comments.count > 0 %}
+                    <div class="box-body chat" id="chat-box">
+                        {% for comment in document.get_moderated_comments %}
+                            <!-- chat item -->
+                            <div class="item">
+                                <img src="{% static "img/avatar5.png" %}" alt="user image" class="online">
+
+                                <p class="message">
+                                    <a href="#" class="name">
+                                        <small class="text-muted"><i class="fa fa-clock-o"></i> {{ comment.created_at }}</small>
+                                        {{ comment.user }}
+                                    </a>
+                                    {{ comment.text }}
+                                </p>
+                                {% if comment.user == request.user %}
+                                    <p><a onclick="return confirm('Вы уверены?')" href="{% url "reader_cabinet:comment_delete" comment.id %}?redirect_to=/reader-cabinet/document/show/{{ document.pk }}" class="text-red">Удалить этот отзыв</a></p>
+                                {% endif %}
+                            </div>
+                            <!-- /.item -->
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>Отзывы пока отсутствуют.</p>
+                {% endif %}
+
+                <form id="form-reader-ticket" action="{% url 'reader_cabinet:add_document_comment' document.id %}" method="post" class="form" autocomplete="off">
+                    {% bootstrap_form form %}
+                    {% csrf_token %}
+                    {% buttons %}
+                        <button type="submit" class="btn btn-primary">
+                        {% bootstrap_icon "ok" %} Сохранить
+                        </button>
+                    {% endbuttons %}
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- /.box -->
+{% endblock %}

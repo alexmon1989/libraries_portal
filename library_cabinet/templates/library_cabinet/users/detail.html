@@ -1,0 +1,53 @@
+{% extends 'library_cabinet/layout/master.html' %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'library_cabinet:home' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+        <li><a href="{% url 'library_cabinet:users_list' %}"><i class="fa fa-dashboard"></i>Сотрудники</a></li>
+        <li class="active">{{ user }}
+{% endblock %}
+
+{% block content-h1 %}
+    Данные сотрудника {{ user }}
+{% endblock %}
+
+{% block content %}
+<!-- Default box -->
+<div class="box">
+    <div class="box-body">
+        <h3>Данные сотрудника</h3>
+
+        <dl>
+            <dt>ФИО</dt>
+            <dd>{{ user.last_name }}&nbsp;{{ user.first_name }}</dd>
+            <dt>Логин</dt>
+            <dd>{{ user.username }}</dd>
+            <dt>Группа</dt>
+            <dd>{{ user.groups.all|first }}</dd>
+            <dt>E-Mail</dt>
+            <dd><a href="mailto:{{ user.email }}">{{ user.email }}</a></dd>
+            <dt>Последний раз был</dt>
+            <dd>{{ user.last_login }}</dd>
+            <dt>Зарегистрирован</dt>
+            <dd>{{ user.date_joined }}</dd>
+        </dl>
+
+        <h4>Статистика</h4>
+
+        <dl>
+            <dt>Заказов выдал</dt>
+            <dd>{{ user.profile.get_issued_orders }}</dd>
+            <dt>Заказов принял</dt>
+            <dd>{{ user.profile.get_passed_orders }}</dd>
+            <dt>Заявок на вступление в библиотеку одобрил</dt>
+            <dd>{{ user.profile.get_approved_request_accesses }}</dd>
+        </dl>
+
+        <p>
+            <a title="Редактировать" href="{% url "library_cabinet:user_edit" user.pk %}" class="btn btn-warning"><i class="fa fa-edit" aria-hidden="true"></i> Редактировать</a>
+            <a title="Деактивировать" href="{% url "library_cabinet:deactivate_user" user.pk %}" onclick="return confirm('Вы уверены?')" class="btn btn-danger"><i class="fa fa-remove" aria-hidden="true"></i> Деактивировать</a>
+        </p>
+    </div>
+</div>
+<!-- /.box -->
+{% endblock %}

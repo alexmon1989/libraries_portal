@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="home.region" pk="1">
+        <field name="title" type="CharField">Ставропольский край</field>
+    </object>
+    <object model="home.region" pk="2">
+        <field name="title" type="CharField">Московская область</field>
+    </object>
+    <object model="home.region" pk="3">
+        <field name="title" type="CharField">Республика Крым</field>
+    </object>
+</django-objects>

@@ -1,0 +1,82 @@
+{% extends 'library_cabinet/layout/master.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'library_cabinet:home' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+        <li class="active">Редактирование документа</li>
+    </ol>
+{% endblock %}
+
+{% block content-h1 %}
+    {{ document.title }}
+{% endblock %}
+
+{% block content %}
+<!-- Default box -->
+<div class="box">
+    <div class="box-body">
+        <form id="form-document-edit" action="{% url 'library_cabinet:document_edit' document.pk %}" method="post" class="form">
+            {% bootstrap_form form %}
+            {% csrf_token %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">
+                {% bootstrap_icon "ok" %} Сохранить
+                </button>
+            {% endbuttons %}
+        </form>
+
+        <a href="{% url "library_cabinet:documents_list" %}">Назад ко всем документам</a>
+    </div>
+</div>
+<!-- /.box -->
+
+<div class="modal fade" tabindex="-1" role="dialog" id="add-another-person-modal">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Добавление Другой персоны</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Имя</label>
+                <input class="form-control" placeholder="Имя" id="new-another-person-name" type="text">
+            </div>
+            <div class="errors text-danger"></div>
+        </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" id="add-another-person-submit">Сохранить</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" tabindex="-1" role="dialog" id="add-rubric-modal">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Добавление Рубрики</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Имя</label>
+                <input class="form-control" placeholder="Имя" id="new-rubric-name" type="text">
+            </div>
+            <div class="errors text-danger"></div>
+        </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" id="add-rubric-submit">Сохранить</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static "library_cabinet/js/pages/documents/scripts.js" %}"></script>
+{% endblock %}

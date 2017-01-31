@@ -1,0 +1,11 @@
+{% load bootstrap3 %}
+
+<form id="form-library-registration" action="/home/library-register/" method="post" class="form form-horizontal" autocomplete="off">
+    {% csrf_token %}
+    {% bootstrap_form library_registration_form layout='horizontal' %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">
+        {% bootstrap_icon "ok" %} Зарегистрироваться
+        </button>
+    {% endbuttons %}
+</form>

@@ -1,0 +1,29 @@
+<style type="text/css">
+    table {
+        border-collapse: collapse;
+    }
+    td, th {
+        padding: 3px;
+        border: 1px solid black;
+    }
+    tr:first-child td {
+        text-align: center
+    }
+</style>
+
+<table>
+    <tr>
+        <td><b>Сотрудник</b></td>
+        <td><b>Количество выданных книг</b></td>
+        <td><b>Количество зарегистрированных читателей</b></td>
+        <td><b>Зарегистрированные читатели</b></td>
+    </tr>
+    {% for item in items %}
+        <tr>
+            <td>{{ item.0 }}</td>
+            <td>{{ item.1 }}</td>
+            <td>{{ item.2 }}</td>
+            <td>{{ item.3 }}</td>
+        </tr>
+    {% endfor %}
+</table>

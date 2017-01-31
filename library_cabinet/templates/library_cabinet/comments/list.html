@@ -1,0 +1,87 @@
+{% extends 'library_cabinet/layout/master.html' %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'library_cabinet:home' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+        <li class="active">Отзывы</li>
+    </ol>
+{% endblock %}
+
+{% block content-h1 %}
+    Список отзывов
+{% endblock %}
+
+{% block content %}
+<!-- Default box -->
+<div class="box">
+    <div class="box-body">
+        {% if comments_list %}
+            <table id="data" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Пользователь</th>
+                        <th>Текст отзыва</th>
+                        <th>Отзыв на</th>
+                        <th>Промодерирован</th>
+                        <th>Создан</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comment in comments_list %}
+                        <tr>
+                            <td><a href="{% url "library_cabinet:reader_detail" comment.user.readerticket.pk %}">{{ comment.user }}</a></td>
+                            <td>{{ comment }}</td>
+                            <td>
+                                {% if comment.library_set.first %}
+                                    Библиотека
+                                {% elif comment.document_set.first %}
+                                    Документ: <a href="{% url "library_cabinet:document_detail" comment.document_set.first.pk %}">{{ comment.document_set.first }}</a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if comment.moderated %}
+                                    <span class="text-green text-bold">Да</span>
+                                {% else %}
+                                    <span class="text-red text-bold">Нет</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ comment.created_at }}</td>
+                            <td>
+                                <a href="{% url "library_cabinet:comment_show" comment.pk %}" class="btn btn-primary" title="Детальнее"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                <a href="{% url "library_cabinet:comment_delete" comment.pk %}" class="btn btn-danger" title="Удалить" onclick="return confirm('Вы уверены?')"><i class="fa fa-close" aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Отзывы отсутствуют.</p>
+        {% endif %}
+    </div>
+</div>
+<!-- /.box -->
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static "plugins/datatables/jquery.dataTables.min.js" %}"></script>
+    <script src="{% static "plugins/datatables/dataTables.bootstrap.min.js" %}"></script>
+    <script>
+        $(function () {
+            $("#data").DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/Russian.json"
+                },
+                "order": [],
+                "columnDefs": [
+                    { "orderable": false, "targets": 4 }
+                ]
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static "plugins/datatables/dataTables.bootstrap.css" %}">
+{% endblock %}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="home.librarytype" pk="1">
+        <field name="title" type="CharField">Государственная</field>
+        <field name="kinds" rel="ManyToManyRel" to="home.librarykind">
+            <object pk="2"></object>
+            <object pk="3"></object>
+            <object pk="6"></object>
+        </field>
+    </object>
+    <object model="home.librarytype" pk="2">
+        <field name="title" type="CharField">Муниципальная</field>
+        <field name="kinds" rel="ManyToManyRel" to="home.librarykind">
+            <object pk="1"></object>
+            <object pk="2"></object>
+            <object pk="3"></object>
+            <object pk="4"></object>
+            <object pk="5"></object>
+            <object pk="6"></object>
+            <object pk="7"></object>
+            <object pk="8"></object>
+            <object pk="9"></object>
+        </field>
+    </object>
+    <object model="home.librarytype" pk="3">
+        <field name="title" type="CharField">Библиотека международной организаций</field>
+        <field name="kinds" rel="ManyToManyRel" to="home.librarykind">
+            <object pk="2"></object>
+            <object pk="9"></object>
+        </field>
+    </object>
+</django-objects>

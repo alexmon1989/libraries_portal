@@ -1,0 +1,90 @@
+{% extends 'library_cabinet/layout/master.html' %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'library_cabinet:home' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+        <li><a href="{% url 'library_cabinet:orders_list' %}"><i class="fa fa-dashboard"></i>Заказы</a></li>
+        <li class="active">{{ order.document }}</li>
+    </ol>
+{% endblock %}
+
+{% block content-h1 %}
+    Заказ на "{{ order.document }}" - {{ order.document.author }}
+{% endblock %}
+
+{% block content %}
+<!-- Default box -->
+<div class="box">
+    <div class="box-body">
+        <h3>Данные заказа</h3>
+
+        <dl>
+            <dt>Читатель</dt>
+            <dd><a href="#">{{ order.user }}</a></dd>
+            <dt>Тип документа</dt>
+            <dd>{{ order.document.document_type }}</dd>
+            <dt>Автор</dt>
+            <dd>{{ order.document.author }}</dd>
+            <dt>Название</dt>
+            <dd><a href="#">{{ order.document.title }}</a></dd>
+            <dt>Текущий статус</dt>
+            <dd>
+                {{ order.status }} <br>
+
+                {% if order.status.title == 'Забронирован' and order.approved %}
+                    <a href="{% url "library_cabinet:issue_document" order.id %}" class="btn btn-primary btn-sm">Выдать документ</a>
+                {% endif %}
+
+                {% if order.status.title == 'Выдан' %}
+                    <a href="{% url "library_cabinet:pass_document" order.id %}" class="btn btn-primary btn-sm">Сдать документ</a>
+                {% endif %}
+            </dd>
+            <dt>Одобрено</dt>
+            <dd>
+                {% if order.approved %}
+                    <span class="text-green"><b>Да</b></span>
+                {% else %}
+                    <span class="text-red">Нет</span> <br>
+                    <a href="{% url "library_cabinet:approve_order" order.id %}" class="btn btn-primary btn-sm">Одобрить</a>
+                {% endif %}
+            </dd>
+            {% if order.status.title == 'Выдан' %}
+            <dt>Рекомендуемая дата возврата</dt>
+            <dd>
+                <span
+                     {% if not order.is_overdue %}
+                         class="text-warning"
+                     {% else %}
+                         class="text-danger"
+                     {% endif %}
+                >
+                    {{ order.get_recommended_return_date|date }}
+                </span>
+            </dd>
+            <dt>Максимальная дата возврата</dt>
+            <dd>
+                <span
+                     {% if not order.is_overdue %}
+                         class="text-warning"
+                     {% else %}
+                         class="text-danger"
+                     {% endif %}
+                >
+                    {{ order.get_max_return_date|date }}
+                </span>
+            </dd>
+            {% endif %}
+        </dl>
+
+        <h4>История заказа</h4>
+
+        <ul class="list-unstyled">
+            <li><strong>Забронирован:</strong> {{ order.created_at }}</li>
+            {% for action in order.orderaction_set.all %}
+                <li><strong>{{ action }}:</strong> {{ action.action_date }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<!-- /.box -->
+{% endblock %}

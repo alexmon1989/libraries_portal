@@ -1,0 +1,79 @@
+{% extends 'library_cabinet/layout/master.html' %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'library_cabinet:home' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+        <li class="active">Заявки читателей</li>
+    </ol>
+{% endblock %}
+
+{% block content-h1 %}
+    Список заявок читателей на доступ к библиотеке
+{% endblock %}
+
+{% block content %}
+<!-- Default box -->
+<div class="box">
+    <div class="box-body">
+        {% if request_accesses_list %}
+            <table id="data" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Читатель</th>
+                        <th>Одобрено</th>
+                        <th>Кем одобрено</th>
+                        <th>Создано</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request_access in request_accesses_list %}
+                        <tr
+                            {% if request_access.approved == 0 %}
+                                class="danger"
+                            {% endif %}
+                        >
+                            <td><a href="{% url "library_cabinet:reader_detail" request_access.user.readerticket.pk %}">{{ request_access.user }}</a></td>
+                            <td>
+                                {% if request_access.approved %}
+                                    <span class="text-green"><b>Да</b></span>
+                                {% else %}
+                                    <a href="{% url "library_cabinet:approve_request_access" request_access.pk %}" title="Нажмите чтобы одобрить"><b>Нет</b></a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if request_access.approved %}
+                                    {{ request_access.approved_by }}
+                                {% endif %}
+                            </td>
+                            <td>{{ request_access.created_at }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Заявки отсутствуют.</p>
+        {% endif %}
+    </div>
+</div>
+<!-- /.box -->
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static "plugins/datatables/jquery.dataTables.min.js" %}"></script>
+    <script src="{% static "plugins/datatables/dataTables.bootstrap.min.js" %}"></script>
+    <script>
+        $(function () {
+            $("#data").DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/Russian.json"
+                },
+                "order": []
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static "plugins/datatables/dataTables.bootstrap.css" %}">
+{% endblock %}

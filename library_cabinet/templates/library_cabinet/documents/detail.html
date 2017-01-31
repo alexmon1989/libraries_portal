@@ -1,0 +1,124 @@
+{% extends 'library_cabinet/layout/master.html' %}
+{% load reader_cabinet_extras %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'library_cabinet:home' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+        <li class="active">Документ</li>
+    </ol>
+{% endblock %}
+
+{% block content-h1 %}
+    {{ document.title }}
+{% endblock %}
+
+{% block content %}
+<!-- Default box -->
+<div class="box">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>Описание документа</h4>
+
+                <dl>
+                    <dt>Название</dt>
+                    <dd>{{ document.title }}</dd>
+                    <dt>Тип документа</dt>
+                    <dd>{{ document.document_type }}</dd>
+                    <dt>Срок возврата</dt>
+                    <dd>2 недели</dd>
+                    <dt>Шифр хранения (№ в каталоге)</dt>
+                    <dd>{{ document.catalog_number }}</dd>
+                    <dt>Автор</dt>
+                    <dd>{{ document.author }}</dd>
+                    <dt>Другие ответственные лица</dt>
+                    <dd>
+                        {% for person in document.another_persons.all %}
+                            {{ person.title }}{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    </dd>
+                    <dt>Язык</dt>
+                    <dd>{{ document.language }}</dd>
+                    <dt>Примечания</dt>
+                    <dd>{{ document.notes }}</dd>
+                    <dt>Предметные рубрики</dt>
+                    <dd>
+                        {% for rubric in document.rubrics.all %}
+                            {{ rubric.title }}{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>Свойства документа</h4>
+
+                <dl>
+                    <dt>Статус доступности</dt>
+                    <dd>
+                        {% if document.utilized %}
+                            Нет
+                        {% else %}
+                            {{ document.document_status }}
+                        {% endif %}
+                    </dd>
+
+                    <dt>Списан</dt>
+                    <dd>
+                        {% if document.utilized %}Да{% else %}Нет{% endif %}
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>Отзывы</h4>
+
+                {% if document.get_moderated_comments.count > 0 %}
+                    <div class="box-body chat" id="chat-box">
+                        {% for comment in document.get_moderated_comments %}
+                            <!-- chat item -->
+                            <div class="item">
+                                <img src="{% static "img/avatar5.png" %}" alt="user image" class="online">
+
+                                <p class="message">
+                                    <a href="#" class="name">
+                                        <small class="text-muted"><i class="fa fa-clock-o"></i> {{ comment.created_at }}</small>
+                                        {{ comment.user }}
+                                    </a>
+                                    {{ comment.text }}
+                                </p>
+                            </div>
+                            <!-- /.item -->
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>Отзывы пока отсутствуют.</p>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>Действия</h4>
+
+                <p>
+                    <a href="{% url 'library_cabinet:document_edit' document.id %}" class="btn btn-warning">Редактировать</a>&nbsp;
+                    {% if not document.utilized %}
+                    <a href="{% url 'library_cabinet:document_utilize' document.id %}" class="btn btn-danger" onclick="return confirm('Вы уверены?')">Списать</a>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <a href="{% url "library_cabinet:documents_list" %}">Назад ко всем документам</a>
+
+    </div>
+</div>
+<!-- /.box -->
+{% endblock %}

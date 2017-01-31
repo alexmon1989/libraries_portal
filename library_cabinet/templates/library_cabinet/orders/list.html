@@ -1,0 +1,96 @@
+{% extends 'library_cabinet/layout/master.html' %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'library_cabinet:home' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+        <li class="active">Заказы</li>
+    </ol>
+{% endblock %}
+
+{% block content-h1 %}
+    Список заказов
+{% endblock %}
+
+{% block content %}
+<!-- Default box -->
+<div class="box">
+    <div class="box-body">
+        {% if orders_list %}
+            <table id="data" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Читатель</th>
+                        <th>Тип документа</th>
+                        <th>Автор</th>
+                        <th>Название</th>
+                        <th>Текущий статус</th>
+                        <th>Одобрен</th>
+                        <th>Создано (забронирован)</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders_list %}
+                        <tr
+                            {% if order.approved == 0 %}
+                                class="danger"
+                            {% else %}
+                                {% if order.status.title == 'Забронирован' %}
+                                    class="success"
+                                {% endif %}
+                            {% endif %}
+
+                            {% if order.status.title == 'Выдан' and order.approved == 1 %}
+                                class="warning"
+                            {% endif %}
+                        >
+                            <td><a href="{% url "library_cabinet:reader_detail" order.user.readerticket.pk %}">{{ order.user }}</a></td>
+                            <td>{{ order.document.document_type }}</td>
+                            <td>{{ order.document.author }}</td>
+                            <td><strong>{{ order.document.title }}</strong></td>
+                            <td>
+                                {{ order.status }}
+                                {% if order.status.title == 'Выдан' %}
+                                    <br>
+                                    <i>рекомендуемая дата возврата: {{ order.get_recommended_return_date|date }}</i> <br>
+                                    <i>максимальная дата возврата: {{ order.get_max_return_date|date }}</i> <br>
+                                {% endif %}
+                            </td>
+                            <td>{% if order.approved %}<span class="text-green"><b>Да</b></span>{% else %}<span class="text-red">Нет</span>{% endif %}</td>
+                            <td>{{ order.created_at }}</td>
+                            <td><a href="{% url "library_cabinet:order_detail" order.pk %}" class="btn btn-primary"><i class="fa fa-eye" aria-hidden="true"></i> Детальнее</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        {% else %}
+            <p>Заказы отсутствуют.</p>
+        {% endif %}
+    </div>
+</div>
+<!-- /.box -->
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static "plugins/datatables/jquery.dataTables.min.js" %}"></script>
+    <script src="{% static "plugins/datatables/dataTables.bootstrap.min.js" %}"></script>
+    <script>
+        $(function () {
+            $("#data").DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/Russian.json"
+                },
+                "order": [],
+                "columnDefs": [
+                    { "orderable": false, "targets": 7 }
+                ]
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static "plugins/datatables/dataTables.bootstrap.css" %}">
+{% endblock %}

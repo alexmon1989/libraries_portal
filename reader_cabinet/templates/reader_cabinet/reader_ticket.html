@@ -1,0 +1,38 @@
+{% extends 'reader_cabinet/layout/master.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'reader_cabinet:home' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+        <li class="active">Читательский билет</li>
+    </ol>
+{% endblock %}
+
+{% block content-h1 %}
+Читательский билет
+{% endblock %}
+
+
+{% block content %}
+<!-- Default box -->
+<div class="box">
+    <div class="box-body">
+        <p><strong>Номер билета:</strong> {{ user.readerticket.id }}</p>
+        <form id="form-reader-ticket" action="{% url 'reader_cabinet:reader_ticket' %}" method="post" class="form" autocomplete="off">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">
+                {% bootstrap_icon "ok" %} Сохранить
+                </button>
+            {% endbuttons %}
+        </form>
+    </div>
+</div>
+<!-- /.box -->
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static "reader_cabinet/js/pages/reader-ticket.js" %}"></script>
+{% endblock %}

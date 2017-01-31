@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="auth.group" pk="1">
+        <field name="name" type="CharField">Читатели</field>
+        <field name="permissions" rel="ManyToManyRel" to="auth.permission"></field>
+    </object>
+    <object model="auth.group" pk="2">
+        <field name="name" type="CharField">Библиотекари-администраторы</field>
+        <field name="permissions" rel="ManyToManyRel" to="auth.permission"></field>
+    </object>
+    <object model="auth.group" pk="3">
+        <field name="name" type="CharField">Библиотекари-комплектаторы</field>
+        <field name="permissions" rel="ManyToManyRel" to="auth.permission"></field>
+    </object>
+    <object model="auth.group" pk="4">
+        <field name="name" type="CharField">Библиотекари-каталогизаторы</field>
+        <field name="permissions" rel="ManyToManyRel" to="auth.permission"></field>
+    </object>
+</django-objects>

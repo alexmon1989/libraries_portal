@@ -1,0 +1,92 @@
+{% extends 'library_cabinet/layout/master.html' %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'library_cabinet:home' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+        <li class="active">Сотрудники</li>
+    </ol>
+{% endblock %}
+
+{% block content-h1 %}
+    Список сотрудников
+{% endblock %}
+
+{% block content %}
+<!-- Default box -->
+<div class="box">
+    <div class="box-body">
+        <p><a class="btn btn-primary" href="{% url "library_cabinet:user_create" %}"><i class="fa fa-plus" aria-hidden="true"></i> Создать</a></p>
+
+        {% if users_list %}
+            <table id="data" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ФИО</th>
+                        <th>Логин</th>
+                        <th>Группа</th>
+                        <th>Последний раз был</th>
+                        <th>Зарегистрирован</th>
+                        <th>Активен</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users_list %}
+                        <tr>
+                            <td>{{ user.last_name }}&nbsp;{{ user.first_name }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.groups.all|first }}</td>
+                            <td>
+                                {% if user.last_login %}
+                                    {{ user.last_login }}
+                                {% else %}
+                                    Никогда
+                                {% endif %}
+                            </td>
+                            <td>{{ user.date_joined }}</td>
+                            <td>{% if user.is_active %}Да{% else %}Нет{% endif %}</td>
+                            <td>
+                                {% if user.is_active %}
+                                <div class="btn-group">
+                                    <a title="Детальнее" href="{% url "library_cabinet:user_detail" user.pk %}" class="btn btn-primary"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a title="Редактировать" href="{% url "library_cabinet:user_edit" user.pk %}" class="btn btn-warning"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                    <a title="Деактивировать" href="{% url "library_cabinet:deactivate_user" user.pk %}" onclick="return confirm('Вы уверены?')" class="btn btn-danger"><i class="fa fa-remove" aria-hidden="true"></i></a>
+                                </div>
+                                {% else %}
+                                     <a title="Активировать" href="{% url "library_cabinet:activate_user" user.pk %}" onclick="return confirm('Вы уверены?')" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Активировать</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Сотрудники отсутствуют.</p>
+        {% endif %}
+    </div>
+</div>
+<!-- /.box -->
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static "plugins/datatables/jquery.dataTables.min.js" %}"></script>
+    <script src="{% static "plugins/datatables/dataTables.bootstrap.min.js" %}"></script>
+    <script>
+        $(function () {
+            $("#data").DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.13/i18n/Russian.json"
+                },
+                "order": [],
+                "columnDefs": [
+                    { "orderable": false, "targets": 6 }
+                ]
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static "plugins/datatables/dataTables.bootstrap.css" %}">
+{% endblock %}

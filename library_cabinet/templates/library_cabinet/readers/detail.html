@@ -1,0 +1,64 @@
+{% extends 'library_cabinet/layout/master.html' %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'library_cabinet:home' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+        <li><a href="{% url 'library_cabinet:readers_list' %}"><i class="fa fa-dashboard"></i>Читатели библиотеки</a></li>
+        <li class="active">{{ reader.user }}</li>
+    </ol>
+{% endblock %}
+
+{% block content-h1 %}
+    Читатель библиотеки {{ reader.user }}
+{% endblock %}
+
+{% block content %}
+<!-- Default box -->
+<div class="box">
+    <div class="box-body">
+        <h3>Данные читателя</h3>
+
+        <dl>
+            <dt>Логин, ФИО</dt>
+            <dd>{{ reader.user }}</dd>
+
+            <dt>Номер читательского билета</dt>
+            <dd>{{ reader.pk }}</dd>
+
+            <dt>E-Mail</dt>
+            <dd>{{ reader.user.email }}</dd>
+
+            <dt>Зарегистрирован</dt>
+            <dd>{{ reader.user.date_joined }}</dd>
+
+            <dt>Город</dt>
+            <dd>{{ reader.user.profile.city }}</dd>
+
+            <dt>Адрес</dt>
+            <dd>{{ reader.user.profile.address }}</dd>
+        </dl>
+
+        <h3>Статистика</h3>
+
+        <dl>
+            <dt>Сделал заказов, шт.</dt>
+            <dd>{{ reader.user.order_set.count }}</dd>
+
+
+            <dt>Список заказанных документов</dt>
+            <dd>
+                {% if reader.user.order_set.count > 0 %}
+                    <ul class="list-unstyled">
+                    {% for order in reader.user.order_set.all|dictsortreversed:"created_at" %}
+                        <li><a href="{% url "library_cabinet:document_detail" order.document.pk %}">{{ order }}</a> ({{ order.created_at }})</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    Заказы отсутствуют
+                {% endif %}
+            </dd>
+        </dl>
+    </div>
+</div>
+<!-- /.box -->
+{% endblock %}

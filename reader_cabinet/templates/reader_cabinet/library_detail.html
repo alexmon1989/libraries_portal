@@ -1,0 +1,171 @@
+{% extends 'reader_cabinet/layout/master.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'reader_cabinet:home' %}"><i class="fa fa-dashboard"></i> Главная</a></li>
+        <li class="active">Библиотека</li>
+    </ol>
+{% endblock %}
+
+{% block content-h1 %}
+    {{ library.title }}
+{% endblock %}
+
+{% block content %}
+<!-- Default box -->
+<div class="box">
+    <div class="box-body">
+
+        <h4>Описание библиотеки</h4>
+
+        <dl>
+            <dt>Название</dt>
+            <dd>{{ library.title }}</dd>
+            <dt>Тип библиотеки</dt>
+            <dd>{{ library.library_type }}</dd>
+            <dt>Вид библиотеки</dt>
+            <dd>{{ library.library_kind }}</dd>
+        </dl>
+
+        <h4>Реквизиты</h4>
+
+        <dl>
+            <dt>Наименование юридического лица</dt>
+            <dd>
+                {% if library.legal_entity_name %}
+                    {{ library.legal_entity_name }}
+                {% else %}
+                    <i>Нет данных</i>
+                {% endif %}
+            </dd>
+            <dt>Адрес (место нахождения) юридического лица</dt>
+            <dd>
+                {% if library.legal_entity_address %}
+                    {{ library.legal_entity_address }}
+                {% else %}
+                    <i>Нет данных</i>
+                {% endif %}
+            </dd>
+            <dt>ОГРН</dt>
+            <dd>
+                {% if library.bin %}
+                    {{ library.bin }}
+                {% else %}
+                    <i>Нет данных</i>
+                {% endif %}
+            </dd>
+            <dt>ИНН</dt>
+            <dd>
+                {% if library.inn %}
+                    {{ library.inn }}
+                {% else %}
+                    <i>Нет данных</i>
+                {% endif %}
+            </dd>
+            <dt>КПП</dt>
+            <dd>
+                {% if library.crr %}
+                    {{ library.crr }}
+                {% else %}
+                    <i>Нет данных</i>
+                {% endif %}
+            </dd>
+        </dl>
+
+        <h4>Регламент</h4>
+
+        <dl>
+            <dt>Рекомендуемое время бронирования книги</dt>
+            <dd>
+                {% if library.reservation_recommended_time %}
+                    {{ library.reservation_recommended_time }}
+                {% else %}
+                    <i>Нет данных</i>
+                {% endif %}
+            </dd>
+            <dt>Максимальное время просрочки возврата документа</dt>
+            <dd>
+                {% if library.return_time_delay_max %}
+                    {{ library.return_time_delay_max }}
+                {% else %}
+                    <i>Нет данных</i>
+                {% endif %}
+            </dd>
+        </dl>
+
+        <h4>О библиотеке</h4>
+
+        <dl>
+            <dt>Адрес</dt>
+            <dd>{{ library.address }}</dd>
+            <dt>Контактная информация</dt>
+            <dd>
+                {% if library.contact_info %}
+                    {{ library.contact_info }}
+                {% else %}
+                    <i>Нет данных</i>
+                {% endif %}
+            </dd>
+            <dt>О нас</dt>
+            <dd>
+                {% if library.about %}
+                    {{ library.about }}
+                {% else %}
+                    <i>Нет данных</i>
+                {% endif %}
+            </dd>
+            <dt>Документы</dt>
+            <dd>
+                 {% if library.librarydocument_set.all %}
+                    {% for document in library.librarydocument_set.all %}
+                        <a href="{% static "uploads/" %}{{ document.upload }}" target="_blank">{{ document.title }}</a><br>
+                    {% endfor %}
+                 {% else %}
+                    <i>Нет данных</i>
+                 {% endif %}
+            </dd>
+        </dl>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>Отзывы</h4>
+
+                {% if library.get_moderated_comments.count > 0 %}
+                    <div class="box-body chat" id="chat-box">
+                        {% for comment in library.get_moderated_comments %}
+                            <!-- chat item -->
+                            <div class="item">
+                                <img src="{% static "img/avatar5.png" %}" alt="user image" class="online">
+
+                                <p class="message">
+                                    <a href="#" class="name">
+                                        <small class="text-muted"><i class="fa fa-clock-o"></i> {{ comment.created_at }}</small>
+                                        {{ comment.user }}
+                                    </a>
+                                    {{ comment.text }}
+                                </p>
+                            </div>
+                            <!-- /.item -->
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>Отзывы пока отсутствуют.</p>
+                {% endif %}
+
+                <form id="form-reader-ticket" action="{% url 'reader_cabinet:add_library_comment' library.id %}" method="post" class="form" autocomplete="off">
+                    {% bootstrap_form form %}
+                    {% csrf_token %}
+                    {% buttons %}
+                        <button type="submit" class="btn btn-primary">
+                        {% bootstrap_icon "ok" %} Сохранить
+                        </button>
+                    {% endbuttons %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.box -->
+{% endblock %}

@@ -1,0 +1,15 @@
+{% load bootstrap3 %}
+{% load home_extras %}
+
+<div class="auth-form">
+    <form action="/home/login/" method="post" class="form form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form auth_form layout='horizontal' horizontal_label_class='col-md-2' %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">
+            {% bootstrap_icon "ok" %} Вход
+            </button>
+            <a class="btn btn-warning" href="{% settings_value "DNEVNIK_AUTH_URL" %}">Войти через <strong>Дневник.ру</strong></a>
+        {% endbuttons %}
+    </form>
+</div>
