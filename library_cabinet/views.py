@@ -344,6 +344,7 @@ def document_create(request):
             document = form.save(commit=False)
             document.library_id = get_my_library(request).pk
             document.document_status_id = 1
+            document.created_by_id = request.user.pk
             document.save()
             messages.success(request, 'Документ успешно создан.')
             return redirect(reverse('library_cabinet:document_edit', args=[document.pk]))
