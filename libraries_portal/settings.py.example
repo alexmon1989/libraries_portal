@@ -17,7 +17,7 @@ from django.contrib.messages import constants as messages
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 MEDIA_ROOT = 'D:/python_projects/libraries_portal/static/uploads/'
-MEDIA_URL = 'http://127.0.0.1:8000/static/uploads/'
+MEDIA_URL = 'http://94.244.34.27/static/uploads/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -120,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UA'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -133,11 +133,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = ''
-
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "home", "static"),
+    os.path.join(BASE_DIR, "library_cabinet", "static"),
     os.path.join(BASE_DIR, "reader_cabinet", "static"),
-    os.path.join(BASE_DIR, "static"),
 ]
 
 ADMIN_REORDER = (
@@ -188,7 +188,7 @@ WKHTMLTOPDF_CMD = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe'
 DNEVNIK_API_URL = 'https://api.dnevnik.ru/v1/'
 DNEVNIK_CLIENT_ID = 'bb6fdf388c724f0fa4d2a12d99ce917c'
 DNEVNIK_SECRET_KEY = 'fc12a62b69de4417b7a2bfa0f13849f8'
-DNEVNIK_REDIRECT_URI = 'http://127.0.0.1:8000/dnevnik-auth/'
+DNEVNIK_REDIRECT_URI = 'http://94.244.34.27/dnevnik-auth/'
 DNEVNIK_AUTH_URL = 'https://login.dnevnik.ru/oauth2?' \
                    'response_type=code&' \
                    'client_id={}&' \
