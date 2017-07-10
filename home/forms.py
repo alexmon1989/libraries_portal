@@ -65,8 +65,8 @@ class UserRegistrationForm(forms.Form):
 
 class LibraryRegistrationForm(forms.Form):
     """Форма регистрации библиотеки"""
-    first_name = forms.CharField(label='Имя, Отчество', max_length=255, required=True)
-    last_name = forms.CharField(label='Фамилия', max_length=255, required=True)
+    first_name = forms.CharField(label='Имя, Отчество (администратора)', max_length=255, required=True)
+    last_name = forms.CharField(label='Фамилия (администратора)', max_length=255, required=True)
     login = forms.CharField(label='Логин', min_length=3, max_length=100, required=True)
     email = forms.EmailField(label='E-Mail', max_length=100, required=True)
     password = forms.CharField(label='Пароль', min_length=5, max_length=100, widget=forms.PasswordInput(),
