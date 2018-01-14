@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:8000"
+    volumes:
+      - ./conf/nginx:/etc/nginx/conf.d
+      - .:/code
+    depends_on:
+      - web
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+  web:
+    build: .
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn libraries_portal.wsgi -b 0.0.0.0:8000 -w 6"
+    volumes:
+      - .:/code
+    expose:
+      - "8000"
+    depends_on:
+      - db
+    restart: always
