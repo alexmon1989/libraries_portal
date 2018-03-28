@@ -30,9 +30,7 @@ class StaffReportXLSStrategy(StaffReportStrategy):
     """Стратегия формирования отчёта в формате XLSX."""
     def make(self, data):
         filename = 'staff_{}.xlsx'.format(datetime.today().timestamp())
-        filepath = os.path.abspath(
-            os.path.join('static', 'uploads', 'reports', filename)
-        )
+        filepath = os.path.join(settings.MEDIA_ROOT, 'reports', filename)
 
         wb = Workbook()
         ws = wb.active
@@ -84,9 +82,7 @@ class StaffReportDOCStrategy(StaffReportStrategy):
     """Стратегия формирования отчёта в формате DOCX."""
     def make(self, data):
         filename = 'staff_{}.docx'.format(datetime.today().timestamp())
-        filepath = os.path.abspath(
-            os.path.join('static', 'uploads', 'reports', filename)
-        )
+        filepath = os.path.join(settings.MEDIA_ROOT, 'reports', filename)
 
         document = Document()
 
@@ -121,9 +117,7 @@ class StaffReportPDFStrategy(StaffReportStrategy):
     """Стратегия формирования отчёта в формате PDF."""
     def make(self, data):
         filename = 'staff_{}.pdf'.format(datetime.today().timestamp())
-        filepath = os.path.abspath(
-            os.path.join('static', 'uploads', 'reports', filename)
-        )
+        filepath = os.path.join(settings.MEDIA_ROOT, 'reports', filename)
 
         response = PDFTemplateResponse(
             request=None,
@@ -141,9 +135,7 @@ class StaffReportODSStrategy(StaffReportStrategy):
     """Стратегия формирования отчёта в формате ODS."""
     def make(self, data):
         filename = 'orders_{}.ods'.format(datetime.today().timestamp())
-        filepath = os.path.abspath(
-            os.path.join('static', 'uploads', 'reports', filename)
-        )
+        filepath = os.path.join(settings.MEDIA_ROOT, 'reports', filename)
 
         # Формирование данных
         table_data = [['Сотрудник',

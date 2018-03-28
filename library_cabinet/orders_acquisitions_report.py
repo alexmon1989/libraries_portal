@@ -27,10 +27,8 @@ class OrdersReportXLSStrategy(OrdersReportStrategy):
     """Стратегия формирования отчёта в формате XLSX."""
     def make(self, data):
         filename = 'orders_acquisitions_{}.xlsx'.format(datetime.today().timestamp())
-        filepath = os.path.abspath(
-            os.path.join('static', 'uploads', 'reports', filename)
-        )
-
+        filepath = os.path.join(settings.MEDIA_ROOT, 'reports', filename)
+		
         wb = Workbook()
         ws = wb.active
 
@@ -79,9 +77,7 @@ class OrdersReportDOCStrategy(OrdersReportStrategy):
     """Стратегия формирования отчёта в формате DOCX."""
     def make(self, data):
         filename = 'orders_acquisitions_{}.docx'.format(datetime.today().timestamp())
-        filepath = os.path.abspath(
-            os.path.join('static', 'uploads', 'reports', filename)
-        )
+        filepath = os.path.join(settings.MEDIA_ROOT, 'reports', filename)
 
         document = Document()
 
@@ -116,9 +112,7 @@ class OrdersReportPDFStrategy(OrdersReportStrategy):
     """Стратегия формирования отчёта в формате PDF."""
     def make(self, data):
         filename = 'orders_acquisitions_{}.pdf'.format(datetime.today().timestamp())
-        filepath = os.path.abspath(
-            os.path.join('static', 'uploads', 'reports', filename)
-        )
+        filepath = os.path.join(settings.MEDIA_ROOT, 'reports', filename)
 
         response = PDFTemplateResponse(
             request=None,
@@ -136,9 +130,7 @@ class OrdersReportODSStrategy(OrdersReportStrategy):
     """Стратегия формирования отчёта в формате ODS."""
     def make(self, data):
         filename = 'orders_acquisitions_{}.ods'.format(datetime.today().timestamp())
-        filepath = os.path.abspath(
-            os.path.join('static', 'uploads', 'reports', filename)
-        )
+        filepath = os.path.join(settings.MEDIA_ROOT, 'reports', filename)
 
         # Формирование данных
         table_data = [['Номер заказа',
