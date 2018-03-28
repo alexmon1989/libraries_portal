@@ -12,9 +12,13 @@ services:
       - web
   db:
     image: postgres
+    volumes:
+      - /var/projects/libraries/database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: foo
+      POSTGRES_PASSWORD: foobar
+      POSTGRES_DB: libraries
     restart: always
-    ports:
-      - "5432:5432"
   web:
     build: .
     command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn libraries_portal.wsgi -b 0.0.0.0:8000 -w 6"

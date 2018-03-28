@@ -16,9 +16,6 @@ from django.contrib.messages import constants as messages
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-MEDIA_ROOT = 'D:/python_projects/libraries_portal/static/uploads/'
-MEDIA_URL = 'http://94.244.34.27/static/uploads/'
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -90,10 +87,21 @@ WSGI_APPLICATION = 'libraries_portal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, '../database/db1.sqlite3'),
         'ATOMIC_REQUESTS': True
     }
 }
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'libraries',
+#        'USER': 'foo',
+#        'PASSWORD': 'foobar',
+#        'HOST': 'db',
+#        'PORT': 5432,
+#    }
+#}
 
 
 # Password validation
@@ -133,12 +141,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "home", "static"),
-    os.path.join(BASE_DIR, "library_cabinet", "static"),
-    os.path.join(BASE_DIR, "reader_cabinet", "static"),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "reader_cabinet", "static"),
+# ]
+STATIC_ROOT = os.path.join(BASE_DIR, "../static")
+
+MEDIA_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../media'))
+MEDIA_URL = '/media/'
+
 
 ADMIN_REORDER = (
     {
@@ -188,9 +198,67 @@ WKHTMLTOPDF_CMD = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe'
 DNEVNIK_API_URL = 'https://api.dnevnik.ru/v1/'
 DNEVNIK_CLIENT_ID = 'bb6fdf388c724f0fa4d2a12d99ce917c'
 DNEVNIK_SECRET_KEY = 'fc12a62b69de4417b7a2bfa0f13849f8'
-DNEVNIK_REDIRECT_URI = 'http://94.244.34.27/dnevnik-auth/'
+DNEVNIK_REDIRECT_URI = 'http://127.0.0.1:8000/dnevnik-auth/'
 DNEVNIK_AUTH_URL = 'https://login.dnevnik.ru/oauth2?' \
                    'response_type=code&' \
                    'client_id={}&' \
                    'scope=FullName,EmailAddress,Schools&' \
                    'redirect_uri={}'.format(DNEVNIK_CLIENT_ID, DNEVNIK_REDIRECT_URI)
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'skin': 'moono',
+        # 'skin': 'office2013',
+        'toolbar_Basic': [
+            ['Source', '-', 'Bold', 'Italic']
+        ],
+        'toolbar_YourCustomToolbarConfig': [
+            {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
+            {'name': 'clipboard', 'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
+            {'name': 'editing', 'items': ['Find', 'Replace', '-', 'SelectAll']},
+            '/',
+            {'name': 'basicstyles',
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
+                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl',
+                       'Language']},
+            {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
+            {'name': 'insert',
+             'items': ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
+            '/',
+            {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
+            {'name': 'colors', 'items': ['TextColor', 'BGColor']},
+            {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
+            {'name': 'about', 'items': ['About']},
+        ],
+        'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
+        # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
+        #'height': 400,
+        # 'width': '100%',
+        # 'filebrowserWindowHeight': 725,
+        # 'filebrowserWindowWidth': 940,
+        # 'toolbarCanCollapse': True,
+        # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
+        'tabSpaces': 4,
+        'extraPlugins': ','.join([
+            'uploadimage',  # the upload image feature
+            # your extra plugins here
+            'div',
+            'autolink',
+            'autoembed',
+            'embedsemantic',
+            'autogrow',
+            # 'devtools',
+            'widget',
+            'lineutils',
+            'clipboard',
+            'dialog',
+            'dialogui',
+            'elementspath'
+        ]),
+        'allowedContent': True,
+    }
+}
