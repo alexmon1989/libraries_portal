@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment
 
@@ -61,9 +63,7 @@ class EnteredDocumentsReportDOCStrategy(EnteredDocumentsReportStrategy):
     """Стратегия формирования отчёта в формате DOCX."""
     def make(self, data):
         filename = 'entered_documents_{}.docx'.format(datetime.today().timestamp())
-        filepath = os.path.abspath(
-            os.path.join('static', 'uploads', 'reports', filename)
-        )
+        filepath = os.path.join(settings.MEDIA_ROOT, 'reports', filename)
 
         document = Document()
 

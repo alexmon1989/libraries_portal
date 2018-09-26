@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment
 
