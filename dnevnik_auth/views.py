@@ -98,8 +98,8 @@ def index(request):
                 region__title=region_title
             )
         except City.DoesNotExist:
-            region = Region.objects.get_or_create(title=region_title)
-            city = City.objects.get_or_create(title=school_data['city'],
+            region, created = Region.objects.get_or_create(title=region_title)
+            city, created = City.objects.get_or_create(title=school_data['city'],
                                               region=region,
                                               defaults={'region_id': region.id})
 
